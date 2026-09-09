@@ -19,7 +19,7 @@ int main() {
 
         switch (opcao) {
             case 1:
-                printf("Cadastro de equipes.\n");
+                cadastrar_equipe();
                 break;
 
             case 2:

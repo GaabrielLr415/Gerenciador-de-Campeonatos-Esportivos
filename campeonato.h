@@ -31,6 +31,7 @@ extern Equipe *equipes;
 extern Jogo *historico_jogos;
 
 void cadastrar_equipe(void);
+Equipe *buscar_equipe(const char *nome);
 void cadastrar_jogador(void);
 void registrar_jogo(void);
 void exibir_classificacao(void);

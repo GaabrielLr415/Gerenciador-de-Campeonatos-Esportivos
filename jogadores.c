@@ -10,30 +10,19 @@ void cadastrar_jogador(void)
 
     printf("Digite o nome da equipe: ");
     fgets(nome_equipe, 80, stdin);
-
-    printf("Digite o nome do jogador: ");
-    fgets(nome_jogador, 80, stdin);
-
     nome_equipe[strcspn(nome_equipe, "\n")] = '\0';
-    nome_jogador[strcspn(nome_jogador, "\n")] = '\0';
 
-    Equipe *equipe = equipes;
-
-    while (equipe != NULL)
-    {
-        if (strcmp(equipe->nome, nome_equipe) == 0)
-        {
-            break;
-        }
-
-        equipe = equipe->proxima;
-    }
+    Equipe *equipe = buscar_equipe(nome_equipe);
 
     if (equipe == NULL)
     {
         printf("Equipe nao encontrada.\n");
         return;
     }
+
+    printf("Digite o nome do jogador: ");
+    fgets(nome_jogador, 80, stdin);
+    nome_jogador[strcspn(nome_jogador, "\n")] = '\0';
 
     Jogador *novo = malloc(sizeof(Jogador));
 
@@ -50,15 +39,19 @@ void cadastrar_jogador(void)
     if (equipe->jogadores == NULL)
     {
         equipe->jogadores = novo;
-        return;
     }
-
-    Jogador *atual = equipe->jogadores;
-
-    while (atual->proximo != NULL)
+    else
     {
-        atual = atual->proximo;
+        Jogador *atual = equipe->jogadores;
+
+        while (atual->proximo != NULL)
+        {
+            atual = atual->proximo;
+        }
+
+        atual->proximo = novo;
     }
 
-    atual->proximo = novo;
+    printf("Jogador '%s' cadastrado com sucesso na equipe '%s'.\n",
+           novo->nome, equipe->nome);
 }

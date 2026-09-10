@@ -23,7 +23,8 @@ int main() {
                 break;
 
             case 2:
-                printf("Cadastro de jogadores.\n");
+                getchar();
+                cadastrar_jogador();
                 break;
 
             case 3:

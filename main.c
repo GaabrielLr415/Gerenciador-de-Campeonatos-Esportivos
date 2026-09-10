@@ -36,11 +36,11 @@ int main() {
                 break;
 
             case 5:
-                printf("Artilheiros.\n");
+                exibir_artilheiros();
                 break;
 
             case 6:
-                printf("Lista de equipes e jogadores.\n");
+                listar_equipes_jogadores();
                 break;
 
             case 7:

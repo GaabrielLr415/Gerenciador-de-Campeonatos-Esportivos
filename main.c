@@ -28,7 +28,7 @@ int main() {
                 break;
 
             case 3:
-                printf("Registro de jogo.\n");
+                registrar_jogo();
                 break;
 
             case 4:

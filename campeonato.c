@@ -80,6 +80,7 @@ void cadastrar_equipe(void) {
         return;
     }
 
+    printf("\n--- Cadastrar Equipe ---\n");
     printf("\nNome da equipe: ");
     scanf(" %79[^\n]", nova_equipe->nome);
 
@@ -133,6 +134,7 @@ void registrar_jogo(void) {
         return;
     }
 
+    printf("\n--- Registrar Jogo ---\n");
     printf("\nEquipe mandante: ");
     scanf(" %79[^\n]", nome_casa);
     printf("Equipe visitante: ");

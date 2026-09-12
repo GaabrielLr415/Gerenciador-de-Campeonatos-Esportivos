@@ -20,6 +20,7 @@ void cadastrar_jogador(void) {
     char nome_equipe[80];
     char nome_jogador[80];
 
+    printf("\n--- Cadastrar Jogador ---\n");
     printf("Nome da equipe: ");
     fgets(nome_equipe, 80, stdin);
     remover_quebra_linha(nome_equipe);

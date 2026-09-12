@@ -3,6 +3,23 @@
 #include <string.h>
 #include "campeonato.h"
 
+Jogador *buscar_jogador(Equipe *equipe, const char *nome)
+{
+    Jogador *atual = equipe == NULL ? NULL : equipe->jogadores;
+
+    while (atual != NULL)
+    {
+        if (strcmp(atual->nome, nome) == 0)
+        {
+            return atual;
+        }
+
+        atual = atual->proximo;
+    }
+
+    return NULL;
+}
+
 void cadastrar_jogador(void)
 {
     char nome_equipe[80];

@@ -90,21 +90,25 @@ void listar_equipes_jogadores(void) {
         return;
     }
 
-    printf("\n--- Equipes e jogadores ---\n");
+    printf("\n========================================\n");
+    printf("          EQUIPES E JOGADORES\n");
+    printf("========================================\n");
     while (equipe != NULL) {
         Jogador *jogador = equipe->jogadores;
 
-        printf("Equipe: %s | Pontos: %d\n", equipe->nome, equipe->pontos);
+        printf("\nEquipe: %s\n", equipe->nome);
+        printf("Pontos: %d\n", equipe->pontos);
         if (jogador == NULL) {
-            printf("Nenhum jogador cadastrado.\n");
+            printf("  Nenhum jogador cadastrado.\n");
         } else {
             printf("Jogadores:\n");
             while (jogador != NULL) {
-                printf("  Jogador: %s | Gols: %d\n", jogador->nome, jogador->gols);
+                printf("  - %-20s | %d gols\n", jogador->nome, jogador->gols);
                 jogador = jogador->proximo;
             }
         }
 
         equipe = equipe->proxima;
     }
+    printf("\n========================================\n");
 }

@@ -1,16 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "campeonato.h"
 
-Jogador *buscar_jogador(Equipe *equipe, const char *nome)
-{
+Jogador *buscar_jogador(Equipe *equipe, const char *nome) {
     Jogador *atual = equipe == NULL ? NULL : equipe->jogadores;
 
-    while (atual != NULL)
-    {
-        if (strcmp(atual->nome, nome) == 0)
-        {
+    while (atual != NULL) {
+        if (comparar_textos(atual->nome, nome) == 0) {
             return atual;
         }
 
@@ -20,55 +16,58 @@ Jogador *buscar_jogador(Equipe *equipe, const char *nome)
     return NULL;
 }
 
-void cadastrar_jogador(void)
-{
+void cadastrar_jogador(void) {
     char nome_equipe[80];
     char nome_jogador[80];
 
-    printf("Digite o nome da equipe: ");
+    printf("Nome da equipe: ");
     fgets(nome_equipe, 80, stdin);
-    nome_equipe[strcspn(nome_equipe, "\n")] = '\0';
+    remover_quebra_linha(nome_equipe);
 
     Equipe *equipe = buscar_equipe(nome_equipe);
 
-    if (equipe == NULL)
-    {
+    if (equipe == NULL) {
         printf("Equipe nao encontrada.\n");
         return;
     }
 
-    printf("Digite o nome do jogador: ");
+    printf("Nome do jogador: ");
     fgets(nome_jogador, 80, stdin);
-    nome_jogador[strcspn(nome_jogador, "\n")] = '\0';
+    remover_quebra_linha(nome_jogador);
+
+    if (nome_jogador[0] == '\0') {
+        printf("O nome do jogador nao pode ser vazio.\n");
+        return;
+    }
+
+    if (buscar_jogador(equipe, nome_jogador) != NULL) {
+        printf("Jogador ja cadastrado nessa equipe.\n");
+        return;
+    }
 
     Jogador *novo = malloc(sizeof(Jogador));
 
-    if (novo == NULL)
-    {
+    if (novo == NULL) {
         printf("Erro ao alocar memoria.\n");
         return;
     }
 
-    strcpy(novo->nome, nome_jogador);
+    copiar_texto(novo->nome, nome_jogador, sizeof(novo->nome));
     novo->gols = 0;
     novo->proximo = NULL;
 
-    if (equipe->jogadores == NULL)
-    {
+    if (equipe->jogadores == NULL) {
         equipe->jogadores = novo;
-    }
-    else
-    {
+    } else {
         Jogador *atual = equipe->jogadores;
 
-        while (atual->proximo != NULL)
-        {
+        while (atual->proximo != NULL) {
             atual = atual->proximo;
         }
 
         atual->proximo = novo;
     }
 
-    printf("Jogador '%s' cadastrado com sucesso na equipe '%s'.\n",
-           novo->nome, equipe->nome);
+    printf("Jogador vinculado a equipe \"%s\" com sucesso!\n",
+           equipe->nome);
 }

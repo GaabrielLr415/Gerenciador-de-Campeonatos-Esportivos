@@ -6,22 +6,21 @@ static int saldo_gols(const Equipe *equipe) {
     return equipe->gols_pro - equipe->gols_contra;
 }
 
-static int comparar_equipes(const void *a, const void *b) {
-    const Equipe *equipe_a = *(const Equipe **)a;
-    const Equipe *equipe_b = *(const Equipe **)b;
+static int equipe_deve_vir_depois(const Equipe *equipe_a,
+                                  const Equipe *equipe_b) {
     int saldo_a = saldo_gols(equipe_a);
     int saldo_b = saldo_gols(equipe_b);
 
     if (equipe_a->pontos != equipe_b->pontos) {
-        return equipe_b->pontos - equipe_a->pontos;
+        return equipe_a->pontos < equipe_b->pontos;
     }
 
     if (saldo_a != saldo_b) {
-        return saldo_b - saldo_a;
+        return saldo_a < saldo_b;
     }
 
     if (equipe_a->gols_pro != equipe_b->gols_pro) {
-        return equipe_b->gols_pro - equipe_a->gols_pro;
+        return equipe_a->gols_pro < equipe_b->gols_pro;
     }
 
     return 0;
@@ -62,7 +61,21 @@ void exibir_classificacao(void) {
         atual = atual->proxima;
     }
 
-    qsort(ranking, total, sizeof(Equipe *), comparar_equipes);
+    for (i = 0; i < total - 1; i++) {
+        int melhor = i;
+
+        for (int j = i + 1; j < total; j++) {
+            if (equipe_deve_vir_depois(ranking[melhor], ranking[j])) {
+                melhor = j;
+            }
+        }
+
+        if (melhor != i) {
+            Equipe *temporaria = ranking[i];
+            ranking[i] = ranking[melhor];
+            ranking[melhor] = temporaria;
+        }
+    }
 
     printf("\n--- Tabela de Classificacao ---\n");
     printf("%-4s | %-20s | %3s | %1s | %1s | %1s | %2s | %2s | %3s\n",

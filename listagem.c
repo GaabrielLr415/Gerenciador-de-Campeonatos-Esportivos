@@ -23,17 +23,6 @@ static int contar_jogadores(void) {
     return total;
 }
 
-static int comparar_artilheiros(const void *a, const void *b) {
-    const Artilheiro *artilheiro_a = a;
-    const Artilheiro *artilheiro_b = b;
-
-    if (artilheiro_a->jogador->gols != artilheiro_b->jogador->gols) {
-        return artilheiro_b->jogador->gols - artilheiro_a->jogador->gols;
-    }
-
-    return 0;
-}
-
 void exibir_artilheiros(void) {
     int total = contar_jogadores();
     int indice = 0;
@@ -63,11 +52,27 @@ void exibir_artilheiros(void) {
         equipe = equipe->proxima;
     }
 
-    qsort(artilheiros, (size_t)total, sizeof(*artilheiros), comparar_artilheiros);
+    for (int i = 0; i < total - 1; i++) {
+        int melhor = i;
 
-    printf("\n--- Artilheiros ---\n");
+        for (int j = i + 1; j < total; j++) {
+            if (artilheiros[j].jogador->gols >
+                artilheiros[melhor].jogador->gols) {
+                melhor = j;
+            }
+        }
+
+        if (melhor != i) {
+            Artilheiro temporario = artilheiros[i];
+            artilheiros[i] = artilheiros[melhor];
+            artilheiros[melhor] = temporario;
+        }
+    }
+
+    printf("\n--- Lista de Artilheiros ---\n");
+    printf("Pos | Jogador | Equipe | Gols\n");
     for (indice = 0; indice < total; indice++) {
-        printf("%d. %s - %s: %d gols\n",
+        printf("%d | %s | %s | %d\n",
                indice + 1,
                artilheiros[indice].jogador->nome,
                artilheiros[indice].nome_equipe,
@@ -89,13 +94,13 @@ void listar_equipes_jogadores(void) {
     while (equipe != NULL) {
         Jogador *jogador = equipe->jogadores;
 
-        printf("\nEquipe: %s | Pontos: %d\n", equipe->nome, equipe->pontos);
+        printf("Equipe: %s | Pontos: %d\n", equipe->nome, equipe->pontos);
         if (jogador == NULL) {
             printf("Nenhum jogador cadastrado.\n");
         } else {
             printf("Jogadores:\n");
             while (jogador != NULL) {
-                printf("- %s (%d gols)\n", jogador->nome, jogador->gols);
+                printf("  Jogador: %s | Gols: %d\n", jogador->nome, jogador->gols);
                 jogador = jogador->proximo;
             }
         }

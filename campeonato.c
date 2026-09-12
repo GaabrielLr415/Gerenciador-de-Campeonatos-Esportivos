@@ -1,19 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include "campeonato.h"
 
 Equipe *equipes = NULL;
 Jogo *historico_jogos = NULL;
 
-// Cadastro e busca de equipes
-// Desenvolvido por: Fillipe
+int ler_inteiro(int *valor) {
+    int resultado;
+    int caractere;
+
+    resultado = scanf("%d", valor);
+    caractere = getchar();
+    while (caractere != '\n' && caractere != EOF) {
+        caractere = getchar();
+    }
+
+    return resultado == 1;
+}
+
+int comparar_textos(const char *primeiro, const char *segundo) {
+    int indice = 0;
+
+    while (primeiro[indice] != '\0' && segundo[indice] != '\0') {
+        if (primeiro[indice] != segundo[indice]) {
+            return (unsigned char)primeiro[indice] -
+                   (unsigned char)segundo[indice];
+        }
+        indice++;
+    }
+
+    return (unsigned char)primeiro[indice] -
+           (unsigned char)segundo[indice];
+}
+
+void copiar_texto(char *destino, const char *origem, int tamanho) {
+    int indice = 0;
+
+    while (indice < tamanho - 1 && origem[indice] != '\0') {
+        destino[indice] = origem[indice];
+        indice++;
+    }
+    destino[indice] = '\0';
+}
+
+void remover_quebra_linha(char *texto) {
+    int indice = 0;
+
+    while (texto[indice] != '\0') {
+        if (texto[indice] == '\n') {
+            texto[indice] = '\0';
+            return;
+        }
+        indice++;
+    }
+}
 
 Equipe *buscar_equipe(const char *nome) {
     Equipe *atual = equipes;
 
     while (atual != NULL) {
-        if (strcmp(atual->nome, nome) == 0) {
+        if (comparar_textos(atual->nome, nome) == 0) {
             return atual;
         }
 
@@ -34,7 +80,7 @@ void cadastrar_equipe(void) {
         return;
     }
 
-    printf("\nDigite o nome da equipe: ");
+    printf("\nNome da equipe: ");
     scanf(" %79[^\n]", nova_equipe->nome);
 
     if (buscar_equipe(nova_equipe->nome) != NULL) {
@@ -52,11 +98,19 @@ void cadastrar_equipe(void) {
 
     nova_equipe->jogadores = NULL;
 
-    nova_equipe->proxima = equipes;
-    equipes = nova_equipe;
+    nova_equipe->proxima = NULL;
+    if (equipes == NULL) {
+        equipes = nova_equipe;
+    } else {
+        Equipe *ultima = equipes;
+        while (ultima->proxima != NULL) {
+            ultima = ultima->proxima;
+        }
+        ultima->proxima = nova_equipe;
+    }
 
-    printf("\nEquipe '%s' cadastrada com sucesso.\n",
-           nova_equipe->nome);
+    printf("\nEquipe cadastrada com sucesso!\n");
+    printf("Estatisticas iniciais: V:0 E:0 D:0 | GP:0 GC:0 | Pontos:0\n");
 }
 
 // Fim - Cadastro e busca de equipes
@@ -79,9 +133,9 @@ void registrar_jogo(void) {
         return;
     }
 
-    printf("\nDigite o nome da equipe da casa: ");
+    printf("\nEquipe mandante: ");
     scanf(" %79[^\n]", nome_casa);
-    printf("Digite o nome da equipe visitante: ");
+    printf("Equipe visitante: ");
     scanf(" %79[^\n]", nome_visitante);
 
     equipe_casa = buscar_equipe(nome_casa);
@@ -97,14 +151,14 @@ void registrar_jogo(void) {
         return;
     }
 
-    printf("Digite os gols de %s: ", equipe_casa->nome);
-    if (scanf("%d", &gols_casa) != 1 || gols_casa < 0) {
+    printf("Gols %s: ", equipe_casa->nome);
+    if (!ler_inteiro(&gols_casa) || gols_casa < 0) {
         printf("\nQuantidade de gols invalida.\n");
         return;
     }
 
-    printf("Digite os gols de %s: ", equipe_visitante->nome);
-    if (scanf("%d", &gols_visitante) != 1 || gols_visitante < 0) {
+    printf("Gols %s: ", equipe_visitante->nome);
+    if (!ler_inteiro(&gols_visitante) || gols_visitante < 0) {
         printf("\nQuantidade de gols invalida.\n");
         return;
     }
@@ -123,13 +177,14 @@ void registrar_jogo(void) {
     }
 
     if (gols_casa > 0) {
+        printf("\nRegistrando artilheiros do jogo...\n");
         int gols_restantes = gols_casa;
         while (gols_restantes > 0) {
             char nome_jogador[80];
             int gols_do_jogador;
             Jogador *jogador;
 
-            printf("Digite o jogador da equipe %s que marcou: ", equipe_casa->nome);
+            printf("Jogador: ");
             scanf(" %79[^\n]", nome_jogador);
             jogador = buscar_jogador(equipe_casa, nome_jogador);
             if (jogador == NULL) {
@@ -137,9 +192,9 @@ void registrar_jogo(void) {
                 continue;
             }
 
-            printf("Quantos gols %s marcou nesta partida (maximo %d): ",
+            printf("Gols nesta partida para %s (maximo %d): ",
                    jogador->nome, gols_restantes);
-            if (scanf("%d", &gols_do_jogador) != 1 ||
+            if (!ler_inteiro(&gols_do_jogador) ||
                 gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
                 printf("Quantidade de gols invalida.\n");
                 continue;
@@ -159,7 +214,7 @@ void registrar_jogo(void) {
             int gols_do_jogador;
             Jogador *jogador;
 
-            printf("Digite o jogador da equipe %s que marcou: ", equipe_visitante->nome);
+            printf("Jogador: ");
             scanf(" %79[^\n]", nome_jogador);
             jogador = buscar_jogador(equipe_visitante, nome_jogador);
             if (jogador == NULL) {
@@ -167,9 +222,9 @@ void registrar_jogo(void) {
                 continue;
             }
 
-            printf("Quantos gols %s marcou nesta partida (maximo %d): ",
+            printf("Gols nesta partida para %s (maximo %d): ",
                    jogador->nome, gols_restantes);
-            if (scanf("%d", &gols_do_jogador) != 1 ||
+            if (!ler_inteiro(&gols_do_jogador) ||
                 gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
                 printf("Quantidade de gols invalida.\n");
                 continue;
@@ -192,12 +247,22 @@ void registrar_jogo(void) {
         return;
     }
 
-    strcpy(novo_jogo->time_casa, equipe_casa->nome);
-    strcpy(novo_jogo->time_visitante, equipe_visitante->nome);
+    copiar_texto(novo_jogo->time_casa, equipe_casa->nome,
+                 sizeof(novo_jogo->time_casa));
+    copiar_texto(novo_jogo->time_visitante, equipe_visitante->nome,
+                 sizeof(novo_jogo->time_visitante));
     novo_jogo->gols_casa = gols_casa;
     novo_jogo->gols_visitante = gols_visitante;
-    novo_jogo->proximo = historico_jogos;
-    historico_jogos = novo_jogo;
+    novo_jogo->proximo = NULL;
+    if (historico_jogos == NULL) {
+        historico_jogos = novo_jogo;
+    } else {
+        Jogo *ultimo_jogo = historico_jogos;
+        while (ultimo_jogo->proximo != NULL) {
+            ultimo_jogo = ultimo_jogo->proximo;
+        }
+        ultimo_jogo->proximo = novo_jogo;
+    }
 
     for (marcador_atual = 0; marcador_atual < total_marcadores; marcador_atual++) {
         marcadores[marcador_atual]->gols += gols_marcados[marcador_atual];
@@ -225,7 +290,8 @@ void registrar_jogo(void) {
         equipe_visitante->pontos++;
     }
 
-    printf("\nJogo registrado: %s %d x %d %s.\n",
+    printf("\nJogo registrado com sucesso!\n");
+    printf("%s %d x %d %s.\n",
            equipe_casa->nome,
            gols_casa,
            gols_visitante,

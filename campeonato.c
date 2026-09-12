@@ -69,6 +69,10 @@ void registrar_jogo(void) {
     Equipe *equipe_casa;
     Equipe *equipe_visitante;
     Jogo *novo_jogo;
+    Jogador **marcadores = NULL;
+    int *gols_marcados = NULL;
+    int total_marcadores;
+    int marcador_atual = 0;
 
     if (equipes == NULL) {
         printf("\nCadastre pelo menos duas equipes antes de registrar um jogo.\n");
@@ -105,8 +109,83 @@ void registrar_jogo(void) {
         return;
     }
 
+    total_marcadores = gols_casa + gols_visitante;
+
+    if (total_marcadores > 0) {
+        marcadores = malloc((size_t)total_marcadores * sizeof(*marcadores));
+        gols_marcados = malloc((size_t)total_marcadores * sizeof(*gols_marcados));
+        if (marcadores == NULL || gols_marcados == NULL) {
+            free(marcadores);
+            free(gols_marcados);
+            printf("\nErro ao preparar os marcadores do jogo.\n");
+            return;
+        }
+    }
+
+    if (gols_casa > 0) {
+        int gols_restantes = gols_casa;
+        while (gols_restantes > 0) {
+            char nome_jogador[80];
+            int gols_do_jogador;
+            Jogador *jogador;
+
+            printf("Digite o jogador da equipe %s que marcou: ", equipe_casa->nome);
+            scanf(" %79[^\n]", nome_jogador);
+            jogador = buscar_jogador(equipe_casa, nome_jogador);
+            if (jogador == NULL) {
+                printf("Jogador nao encontrado nessa equipe.\n");
+                continue;
+            }
+
+            printf("Quantos gols %s marcou nesta partida (maximo %d): ",
+                   jogador->nome, gols_restantes);
+            if (scanf("%d", &gols_do_jogador) != 1 ||
+                gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
+                printf("Quantidade de gols invalida.\n");
+                continue;
+            }
+
+            marcadores[marcador_atual] = jogador;
+            gols_marcados[marcador_atual] = gols_do_jogador;
+            marcador_atual++;
+            gols_restantes -= gols_do_jogador;
+        }
+    }
+
+    if (gols_visitante > 0) {
+        int gols_restantes = gols_visitante;
+        while (gols_restantes > 0) {
+            char nome_jogador[80];
+            int gols_do_jogador;
+            Jogador *jogador;
+
+            printf("Digite o jogador da equipe %s que marcou: ", equipe_visitante->nome);
+            scanf(" %79[^\n]", nome_jogador);
+            jogador = buscar_jogador(equipe_visitante, nome_jogador);
+            if (jogador == NULL) {
+                printf("Jogador nao encontrado nessa equipe.\n");
+                continue;
+            }
+
+            printf("Quantos gols %s marcou nesta partida (maximo %d): ",
+                   jogador->nome, gols_restantes);
+            if (scanf("%d", &gols_do_jogador) != 1 ||
+                gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
+                printf("Quantidade de gols invalida.\n");
+                continue;
+            }
+
+            marcadores[marcador_atual] = jogador;
+            gols_marcados[marcador_atual] = gols_do_jogador;
+            marcador_atual++;
+            gols_restantes -= gols_do_jogador;
+        }
+    }
+
     novo_jogo = malloc(sizeof(*novo_jogo));
     if (novo_jogo == NULL) {
+        free(marcadores);
+        free(gols_marcados);
         printf("\nErro ao alocar memoria para o jogo.\n");
         return;
     }
@@ -117,6 +196,12 @@ void registrar_jogo(void) {
     novo_jogo->gols_visitante = gols_visitante;
     novo_jogo->proximo = historico_jogos;
     historico_jogos = novo_jogo;
+
+    for (marcador_atual = 0; marcador_atual < total_marcadores; marcador_atual++) {
+        marcadores[marcador_atual]->gols += gols_marcados[marcador_atual];
+    }
+    free(marcadores);
+    free(gols_marcados);
 
     equipe_casa->gols_pro += gols_casa;
     equipe_casa->gols_contra += gols_visitante;

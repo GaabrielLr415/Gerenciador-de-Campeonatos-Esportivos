@@ -182,6 +182,8 @@ void registrar_jogo(void) {
         }
     }
 
+    total_marcadores = marcador_atual;
+
     novo_jogo = malloc(sizeof(*novo_jogo));
     if (novo_jogo == NULL) {
         free(marcadores);

@@ -44,6 +44,7 @@ void exibir_classificacao(void) {
     Equipe *atual;
     int i;
 
+    printf("\n--- Tabela de Classificacao ---\n");
     if (total == 0) {
         printf("\nNenhuma equipe cadastrada.\n");
         return;
@@ -77,7 +78,6 @@ void exibir_classificacao(void) {
         }
     }
 
-    printf("\n--- Tabela de Classificacao ---\n");
     printf("%-4s | %-20s | %3s | %1s | %1s | %1s | %2s | %2s | %3s\n",
            "Pos", "Equipe", "Pts", "V", "E", "D", "GP", "GC", "SG");
 

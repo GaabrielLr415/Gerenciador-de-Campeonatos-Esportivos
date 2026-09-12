@@ -30,6 +30,11 @@ typedef struct Jogo {
 extern Equipe *equipes;
 extern Jogo *historico_jogos;
 
+int comparar_textos(const char *primeiro, const char *segundo);
+void copiar_texto(char *destino, const char *origem, int tamanho);
+void remover_quebra_linha(char *texto);
+int ler_inteiro(int *valor);
+
 void cadastrar_equipe(void);
 Equipe *buscar_equipe(const char *nome);
 Jogador *buscar_jogador(Equipe *equipe, const char *nome);

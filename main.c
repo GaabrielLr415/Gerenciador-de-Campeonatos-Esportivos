@@ -4,6 +4,8 @@
 int main() {
     int opcao;
 
+    printf("Sistema inicializado (0 equipes, 0 jogos registrados).\n");
+
     do {
         printf("\n===== GERENCIADOR DE CAMPEONATOS =====\n");
         printf("1 - Cadastrar equipe\n");
@@ -15,7 +17,10 @@ int main() {
         printf("7 - Sair\n");
 
         printf("\nEscolha uma opcao: ");
-        scanf("%d", &opcao);
+        if (!ler_inteiro(&opcao)) {
+            printf("Opcao invalida.\n");
+            continue;
+        }
 
         switch (opcao) {
             case 1:
@@ -23,7 +28,6 @@ int main() {
                 break;
 
             case 2:
-                getchar();
                 cadastrar_jogador();
                 break;
 

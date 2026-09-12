@@ -48,6 +48,7 @@ int main() {
                 break;
 
             case 7:
+                printf("\n--- Encerrar Programa ---\n");
                 liberar_memoria();
                 printf("Encerrando o programa.\n");
                 break;

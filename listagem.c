@@ -29,6 +29,7 @@ void exibir_artilheiros(void) {
     Artilheiro *artilheiros;
     Equipe *equipe;
 
+    printf("\n--- Lista de Artilheiros ---\n");
     if (total == 0) {
         printf("\nNenhum jogador cadastrado.\n");
         return;
@@ -69,7 +70,6 @@ void exibir_artilheiros(void) {
         }
     }
 
-    printf("\n--- Lista de Artilheiros ---\n");
     printf("Pos | Jogador | Equipe | Gols\n");
     for (indice = 0; indice < total; indice++) {
         printf("%d | %s | %s | %d\n",
@@ -85,14 +85,14 @@ void exibir_artilheiros(void) {
 void listar_equipes_jogadores(void) {
     Equipe *equipe = equipes;
 
+    printf("\n========================================\n");
+    printf("          EQUIPES E JOGADORES\n");
+    printf("========================================\n");
     if (equipe == NULL) {
         printf("\nNenhuma equipe cadastrada.\n");
         return;
     }
 
-    printf("\n========================================\n");
-    printf("          EQUIPES E JOGADORES\n");
-    printf("========================================\n");
     while (equipe != NULL) {
         Jogador *jogador = equipe->jogadores;
 

@@ -129,12 +129,12 @@ void registrar_jogo(void) {
     int total_marcadores;
     int marcador_atual = 0;
 
+    printf("\n--- Registrar Jogo ---\n");
     if (equipes == NULL) {
         printf("\nCadastre pelo menos duas equipes antes de registrar um jogo.\n");
         return;
     }
 
-    printf("\n--- Registrar Jogo ---\n");
     printf("\nEquipe mandante: ");
     scanf(" %79[^\n]", nome_casa);
     printf("Equipe visitante: ");

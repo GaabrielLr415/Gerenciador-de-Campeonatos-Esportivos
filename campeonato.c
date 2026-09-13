@@ -73,7 +73,6 @@ Equipe *buscar_equipe(const char *nome) {
 void cadastrar_equipe(void) {
     Equipe *nova_equipe;
 
-    printf("\nAlocando novo no para a equipe...\n");
     nova_equipe = malloc(sizeof(Equipe));
 
     if (nova_equipe == NULL) {
@@ -84,6 +83,8 @@ void cadastrar_equipe(void) {
     printf("\n--- Cadastrar Equipe ---\n");
     printf("\nNome da equipe: ");
     scanf(" %79[^\n]", nova_equipe->nome);
+
+    printf("\nAlocando novo no para a equipe...\n");
 
     if (buscar_equipe(nova_equipe->nome) != NULL) {
         printf("\nEquipe ja cadastrada.\n");

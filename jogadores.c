@@ -45,6 +45,9 @@ void cadastrar_jogador(void) {
         return;
     }
 
+    printf("\nAlocando novo no para o jogador...\n");
+
+
     Jogador *novo = malloc(sizeof(Jogador));
 
     if (novo == NULL) {

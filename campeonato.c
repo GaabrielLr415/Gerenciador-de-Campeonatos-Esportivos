@@ -254,6 +254,8 @@ void registrar_jogo(void) {
 
     total_marcadores = marcador_atual;
 
+    printf("\nAlocando novo no para o jogo no historico...\n");
+
     novo_jogo = malloc(sizeof(*novo_jogo));
     if (novo_jogo == NULL) {
         free(marcadores);

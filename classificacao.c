@@ -78,11 +78,11 @@ void exibir_classificacao(void) {
         }
     }
 
-    printf("%-4s | %-20s | %3s | %1s | %1s | %1s | %2s | %2s | %3s\n",
-           "Pos", "Equipe", "Pts", "V", "E", "D", "GP", "GC", "SG");
+        printf("%-3s | %-9s | %-3s | %1s | %1s | %1s | %2s | %2s | %2s\n",
+            "Pos", "Equipe", "Pts", "V", "E", "D", "GP", "GC", "SG");
 
     for (i = 0; i < total; i++) {
-        printf("%-4d | %-20s | %3d | %1d | %1d | %1d | %2d | %2d | %+3d\n",
+        printf("%-3d | %-9s | %-3d | %1d | %1d | %1d | %-2d | %-2d | %+2d\n",
                i + 1,
                ranking[i]->nome,
                ranking[i]->pontos,

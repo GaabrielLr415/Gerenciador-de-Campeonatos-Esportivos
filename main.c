@@ -7,14 +7,14 @@ int main() {
     printf("Sistema inicializado (0 equipes, 0 jogos registrados).\n");
 
     do {
-        printf("\n===== GERENCIADOR DE CAMPEONATOS =====\n");
-        printf("1 - Cadastrar equipe\n");
-        printf("2 - Cadastrar jogador\n");
-        printf("3 - Registrar jogo\n");
-        printf("4 - Exibir classificacao\n");
-        printf("5 - Exibir artilheiros\n");
-        printf("6 - Listar equipes e jogadores\n");
-        printf("7 - Sair\n");
+        printf("\n===== Gerenciador de Campeonatos =====\n");
+        printf("1. Cadastrar equipe\n");
+        printf("2. Cadastrar jogador\n");
+        printf("3. Registrar jogo\n");
+        printf("4. Exibir tabela de classificacao\n");
+        printf("5. Listar artilheiros\n");
+        printf("6. Listar equipes e jogadores\n");
+        printf("7. Sair\n");
 
         printf("\nEscolha uma opcao: ");
         if (!ler_inteiro(&opcao)) {
@@ -48,7 +48,6 @@ int main() {
                 break;
 
             case 7:
-                printf("\n--- Encerrar Programa ---\n");
                 liberar_memoria();
                 printf("Encerrando o programa.\n");
                 break;

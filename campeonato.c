@@ -73,6 +73,7 @@ Equipe *buscar_equipe(const char *nome) {
 void cadastrar_equipe(void) {
     Equipe *nova_equipe;
 
+    printf("\nAlocando novo no para a equipe...\n");
     nova_equipe = malloc(sizeof(Equipe));
 
     if (nova_equipe == NULL) {
@@ -112,6 +113,17 @@ void cadastrar_equipe(void) {
 
     printf("\nEquipe cadastrada com sucesso!\n");
     printf("Estatisticas iniciais: V:0 E:0 D:0 | GP:0 GC:0 | Pontos:0\n");
+
+    int total = 0;
+Equipe *atual = equipes;
+
+while (atual != NULL) {
+    total++;
+    atual = atual->proxima;
+}
+
+printf("Total de equipes: %d\n", total);
+
 }
 
 // Fim - Cadastro e busca de equipes

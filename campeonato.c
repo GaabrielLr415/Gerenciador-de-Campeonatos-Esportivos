@@ -157,7 +157,14 @@ void registrar_jogo(void) {
     equipe_visitante = buscar_equipe(nome_visitante);
 
     if (equipe_casa == NULL || equipe_visitante == NULL) {
-        printf("\nUma ou ambas as equipes nao foram encontradas.\n");
+        if (equipe_casa == NULL) {
+            printf("\nErro: equipe \"%s\" nao encontrada.\n", nome_casa);
+        }
+        if (equipe_visitante == NULL) {
+            printf("Erro: equipe \"%s\" nao encontrada.\n", nome_visitante);
+        }
+        printf("Nenhuma memoria foi alocada.\n");
+        printf("Jogo nao registrado.\n");
         return;
     }
 
@@ -207,8 +214,7 @@ void registrar_jogo(void) {
                 continue;
             }
 
-            printf("Gols nesta partida para %s (maximo %d): ",
-                   jogador->nome, gols_restantes);
+                 printf(" | Gols nesta partida: ");
             if (!ler_inteiro(&gols_do_jogador) ||
                 gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
                 printf("Quantidade de gols invalida.\n");
@@ -237,8 +243,7 @@ void registrar_jogo(void) {
                 continue;
             }
 
-            printf("Gols nesta partida para %s (maximo %d): ",
-                   jogador->nome, gols_restantes);
+                 printf(" | Gols nesta partida: ");
             if (!ler_inteiro(&gols_do_jogador) ||
                 gols_do_jogador <= 0 || gols_do_jogador > gols_restantes) {
                 printf("Quantidade de gols invalida.\n");
@@ -307,12 +312,36 @@ void registrar_jogo(void) {
         equipe_visitante->pontos++;
     }
 
-    printf("\nJogo registrado com sucesso!\n");
-    printf("%s %d x %d %s.\n",
-           equipe_casa->nome,
-           gols_casa,
-           gols_visitante,
-           equipe_visitante->nome);
+        printf("\nJogo registrado com sucesso!\n");
+        printf("Atualizando estatisticas...\n");
+        if (gols_casa > gols_visitante) {
+         printf("%s: Vitoria (+3 pontos) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_casa->nome, equipe_casa->vitorias,
+             equipe_casa->empates, equipe_casa->derrotas,
+             equipe_casa->gols_pro, equipe_casa->gols_contra);
+         printf("%s: Derrota (+0 pontos) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_visitante->nome, equipe_visitante->vitorias,
+             equipe_visitante->empates, equipe_visitante->derrotas,
+             equipe_visitante->gols_pro, equipe_visitante->gols_contra);
+        } else if (gols_casa < gols_visitante) {
+         printf("%s: Derrota (+0 pontos) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_casa->nome, equipe_casa->vitorias,
+             equipe_casa->empates, equipe_casa->derrotas,
+             equipe_casa->gols_pro, equipe_casa->gols_contra);
+         printf("%s: Vitoria (+3 pontos) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_visitante->nome, equipe_visitante->vitorias,
+             equipe_visitante->empates, equipe_visitante->derrotas,
+             equipe_visitante->gols_pro, equipe_visitante->gols_contra);
+        } else {
+         printf("%s: Empate (+1 ponto) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_casa->nome, equipe_casa->vitorias,
+             equipe_casa->empates, equipe_casa->derrotas,
+             equipe_casa->gols_pro, equipe_casa->gols_contra);
+         printf("%s: Empate (+1 ponto) | V:%d E:%d D:%d | GP:%d GC:%d\n",
+             equipe_visitante->nome, equipe_visitante->vitorias,
+             equipe_visitante->empates, equipe_visitante->derrotas,
+             equipe_visitante->gols_pro, equipe_visitante->gols_contra);
+        }
 }
 
 void liberar_memoria(void) {
